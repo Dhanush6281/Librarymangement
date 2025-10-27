@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+        }
+
+        :root {
+            --primary: #4a9cff;
+            --dark: #2d3436;
+            --light: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(90deg, var(--primary) 0%, #a1c4fd 50%, #c2e9fb 80%, var(--light) 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-area {
+            flex: 0 0 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .character-container {
+            flex: 0 0 20%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reading-kid {
+            width: 200px;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(800px) rotateY(-5deg) rotateX(5deg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .kid-head {
+            width: 100px;
+            height: 100px;
+            background: var(--light);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50px;
+            z-index: 3;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .kid-hair {
+            width: 110px;
+            height: 50px;
+            background: var(--dark);
+            border-radius: 50px 50px 0 0;
+            position: absolute;
+            top: -15px;
+            left: 45px;
+            z-index: 2;
+        }
+
+        .kid-body {
+            width: 120px;
+            height: 150px;
+            background: var(--primary);
+            border-radius: 60px 60px 20px 20px;
+            position: absolute;
+            top: 90px;
+            left: 40px;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: bodyMove 4s ease-in-out infinite;
+        }
+
+        .kid-arm {
+            width: 40px;
+            height: 100px;
+            background: var(--light);
+            border-radius: 20px;
+            position: absolute;
+            top: 100px;
+        }
+
+        .arm-left {
+            left: 15px;
+            transform: rotate(-20deg);
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .arm-right {
+            right: 15px;
+            transform: rotate(20deg);
+            animation: wave 2s ease-in-out infinite reverse;
+        }
+
+        .kid-leg {
+            width: 50px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 25px 25px 15px 15px;
+            position: absolute;
+            top: 230px;
+        }
+
+        .leg-left {
+            left: 45px;
+            animation: legMove 3s ease-in-out infinite;
+        }
+
+        .leg-right {
+            right: 45px;
+            animation: legMove 3s ease-in-out infinite reverse;
+        }
+
+        .book {
+            width: 80px;
+            height: 60px;
+            background: var(--light);
+            border-radius: 10px;
+            position: absolute;
+            top: 120px;
+            left: 60px;
+            transform: rotate(-15deg);
+            z-index: 4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: bookMove 2s ease-in-out infinite;
+        }
+
+        .book:after {
+            content: "";
+            position: absolute;
+            width: 90%;
+            height: 5px;
+            background: var(--primary);
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+
+        .eye-container {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            top: 35px;
+            left: 20px;
+        }
+
+        .kid-eye {
+            width: 15px;
+            height: 15px;
+            background: var(--dark);
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .eye-left {
+            left: 10px;
+        }
+
+        .eye-right {
+            right: 10px;
+        }
+
+        .kid-mouth {
+            width: 25px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 0 0 12px 12px;
+            position: absolute;
+            top: 65px;
+            left: 37px;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px;
+            background: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 5px dashed var(--primary);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-section {
+            flex: 1;
+            background: var(--light);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 5px solid var(--primary);
+        }
+
+        .content-section {
+            flex: 2;
+            background: var(--light);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 5px solid var(--primary);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dotted var(--primary);
+            text-align: center;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            padding: 15px 18px;
+            background: var(--light);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--dark);
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background: var(--primary);
+            color: white;
+        }
+
+        .menu-btn i {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .menu-btn:hover i {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: var(--light);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(74, 156, 255, 0.3);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: #3a8cff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px dashed var(--primary);
+        }
+
+        th {
+            background: var(--primary);
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8faff;
+        }
+
+        tr:hover {
+            background-color: #e6f0ff;
+        }
+
+        .search-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-option {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .success {
+            background: #e6f7ff;
+            border: 3px solid var(--primary);
+            color: var(--dark);
+        }
+
+        .error {
+            background: #ffe6e6;
+            border: 3px solid var(--primary);
+            color: var(--dark);
+        }
+
+        .warning {
+            background: #fff9e6;
+            border: 3px solid var(--primary);
+            color: var(--dark);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 15px;
+            color: var(--dark);
+            font-size: 0.9rem;
+            background: var(--light);
+            border-radius: 10px;
+            border: 3px dashed var(--primary);
+            font-style: italic;
+        }
+
+        @keyframes float {
+            0% {
+                transform: perspective(800px) rotateY(-5deg) rotateX(5deg) translateY(0);
+            }
+            50% {
+                transform: perspective(800px) rotateY(-5deg) rotateX(5deg) translateY(-10px);
+            }
+            100% {
+                transform: perspective(800px) rotateY(-5deg) rotateX(5deg) translateY(0);
+            }
+        }
+
+        @keyframes wave {
+            0% {
+                transform: rotate(-20deg);
+            }
+            50% {
+                transform: rotate(-10deg);
+            }
+            100% {
+                transform: rotate(-20deg);
+            }
+        }
+
+        @keyframes bookMove {
+            0% {
+                transform: rotate(-15deg);
+            }
+            50% {
+                transform: rotate(-10deg);
+            }
+            100% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        @keyframes bodyMove {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes legMove {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .content-area {
+                flex: 0 0 100%;
+            }
+            
+            .character-container {
+                flex: 0 0 auto;
+                order: 2;
+            }
+            
+            .reading-kid {
+                transform: perspective(800px) rotateY(0) rotateX(5deg);
+            }
+            
+            body {
+                background: linear-gradient(180deg, var(--primary) 0%, #a1c4fd 50%, #c2e9fb 80%, var(--light) 100%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .menu-section, .content-section {
+                min-width: 100%;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-area">
+            <header>
+                <h1><i class="fas fa-book-open"></i> Kids Library</h1>
+                <p>Where Books Come to Life!</p>
+            </header>
+            
+            <div class="main-content">
+                <div class="menu-section">
+                    <h2>Library Menu</h2>
+                    <div class="menu-options">
+                        <button class="menu-btn" onclick="showSection('add-book')">
+                            <i class="fas fa-plus-circle"></i> Add New Book
+                        </button>
+                        <button class="menu-btn" onclick="showSection('upgrade-book')">
+                            <i class="fas fa-sync-alt"></i> Add More Books
+                        </button>
+                        <button class="menu-btn" onclick="showSection('search-book')">
+                            <i class="fas fa-search"></i> Find Books
+                        </button>
+                        <button class="menu-btn" onclick="showSection('show-books')">
+                            <i class="fas fa-list"></i> All Our Books
+                        </button>
+                        <button class="menu-btn" onclick="showSection('register-student')">
+                            <i class="fas fa-user-plus"></i> Join Our Library
+                        </button>
+                        <button class="menu-btn" onclick="showSection('show-students')">
+                            <i class="fas fa-users"></i> Our Library Friends
+                        </button>
+                        <button class="menu-btn" onclick="showSection('checkout-book')">
+                            <i class="fas fa-sign-out-alt"></i> Borrow a Book
+                        </button>
+                        <button class="menu-btn" onclick="showSection('checkin-book')">
+                            <i class="fas fa-sign-in-alt"></i> Return a Book
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <!-- Add Book Section -->
+                    <div id="add-book" class="content-panel">
+                        <h2><i class="fas fa-plus-circle"></i> Add a New Book</h2>
+                        <div id="add-book-message"></div>
+                        <form id="add-book-form">
+                            <div class="form-group">
+                                <label for="book-sno"><i class="fas fa-hashtag"></i> Book Number</label>
+                                <input type="number" id="book-sno" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-name"><i class="fas fa-book"></i> Book Name</label>
+                                <input type="text" id="book-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="author-name"><i class="fas fa-user-edit"></i> Author Name</label>
+                                <input type="text" id="author-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-qty"><i class="fas fa-copy"></i> How Many Books?</label>
+                                <input type="number" id="book-qty" required>
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> Add Book to Library</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Upgrade Book Quantity Section -->
+                    <div id="upgrade-book" class="content-panel hidden">
+                        <h2><i class="fas fa-sync-alt"></i> Add More Books</h2>
+                        <div id="upgrade-book-message"></div>
+                        <form id="upgrade-book-form">
+                            <div class="form-group">
+                                <label for="upgrade-sno"><i class="fas fa-hashtag"></i> Book Number</label>
+                                <input type="number" id="upgrade-sno" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="add-qty"><i class="fas fa-plus"></i> How Many More?</label>
+                                <input type="number" id="add-qty" required>
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-sync-alt"></i> Add More Books</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Search Book Section -->
+                    <div id="search-book" class="content-panel hidden">
+                        <h2><i class="fas fa-search"></i> Find Books</h2>
+                        <div class="search-options">
+                            <div class="search-option">
+                                <button class="btn" onclick="searchBySerial()"><i class="fas fa-hashtag"></i> Search by Number</button>
+                            </div>
+                            <div class="search-option">
+                                <button class="btn" onclick="searchByAuthor()"><i class="fas fa-user-edit"></i> Search by Author</button>
+                            </div>
+                        </div>
+                        <div id="search-results"></div>
+                    </div>
+                    
+                    <!-- Show All Books Section -->
+                    <div id="show-books" class="content-panel hidden">
+                        <h2><i class="fas fa-list"></i> All Our Books</h2>
+                        <div id="books-table-container"></div>
+                    </div>
+                    
+                    <!-- Register Student Section -->
+                    <div id="register-student" class="content-panel hidden">
+                        <h2><i class="fas fa-user-plus"></i> Join Our Library</h2>
+                        <div id="register-student-message"></div>
+                        <form id="register-student-form">
+                            <div class="form-group">
+                                <label for="student-name"><i class="fas fa-user"></i> Your Name</label>
+                                <input type="text" id="student-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-number"><i class="fas fa-id-card"></i> Your Library Card Number</label>
+                                <input type="text" id="reg-number" required>
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-user-plus"></i> Join Library</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Show All Students Section -->
+                    <div id="show-students" class="content-panel hidden">
+                        <h2><i class="fas fa-users"></i> Our Library Friends</h2>
+                        <div id="students-table-container"></div>
+                    </div>
+                    
+                    <!-- Check Out Book Section -->
+                    <div id="checkout-book" class="content-panel hidden">
+                        <h2><i class="fas fa-sign-out-alt"></i> Borrow a Book</h2>
+                        <div id="checkout-message"></div>
+                        <form id="checkout-form">
+                            <div class="form-group">
+                                <label for="student-reg-checkout"><i class="fas fa-id-card"></i> Your Library Card Number</label>
+                                <input type="text" id="student-reg-checkout" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-sno-checkout"><i class="fas fa-hashtag"></i> Book Number</label>
+                                <input type="number" id="book-sno-checkout" required>
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-sign-out-alt"></i> Borrow Book</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Check In Book Section -->
+                    <div id="checkin-book" class="content-panel hidden">
+                        <h2><i class="fas fa-sign-in-alt"></i> Return a Book</h2>
+                        <div id="checkin-message"></div>
+                        <form id="checkin-form">
+                            <div class="form-group">
+                                <label for="student-reg-checkin"><i class="fas fa-id-card"></i> Your Library Card Number</label>
+                                <input type="text" id="student-reg-checkin" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-sno-checkin"><i class="fas fa-hashtag"></i> Book Number</label>
+                                <input type="number" id="book-sno-checkin" required>
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Return Book</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>"A book is a dream that you hold in your hand." - Neil Gaiman</p>
+            </footer>
+        </div>
+        
+        <div class="character-container">
+            <div class="reading-kid">
+                <div class="kid-hair"></div>
+                <div class="kid-head"></div>
+                <div class="kid-body"></div>
+                <div class="kid-arm arm-left"></div>
+                <div class="kid-arm arm-right"></div>
+                <div class="kid-leg leg-left"></div>
+                <div class="kid-leg leg-right"></div>
+                <div class="book"></div>
+                <div class="eye-container">
+                    <div class="kid-eye eye-left" id="eye-left"></div>
+                    <div class="kid-eye eye-right" id="eye-right"></div>
+                </div>
+                <div class="kid-mouth"></div>
+            </div>
+            <div style="text-align: center; margin-top: 20px; font-weight: bold; color: var(--dark); font-size: 1rem;">
+                Hi! I'm Booky!<br>Let's explore the library!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage for books and students
+        let books = JSON.parse(localStorage.getItem('kidsLibraryBooks')) || [];
+        let students = JSON.parse(localStorage.getItem('kidsLibraryStudents')) || [];
+        
+        // Eye movement tracking
+        document.addEventListener('mousemove', (e) => {
+            const eyes = document.querySelectorAll('.kid-eye');
+            eyes.forEach(eye => {
+                const eyeRect = eye.getBoundingClientRect();
+                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+                
+                const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+                const distance = Math.min(5, Math.sqrt(
+                    Math.pow(e.clientX - eyeCenterX, 2) + 
+                    Math.pow(e.clientY - eyeCenterY, 2)
+                ) / 20);
+                
+                const moveX = Math.cos(angle) * distance;
+                const moveY = Math.sin(angle) * distance;
+                
+                eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+        
+        // Show the specified section and hide others
+        function showSection(sectionId) {
+            // Hide all content panels
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Show the selected panel
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // If showing books or students, update the tables
+            if (sectionId === 'show-books') {
+                displayBooksTable();
+            } else if (sectionId === 'show-students') {
+                displayStudentsTable();
+            }
+        }
+        
+        // Initialize with Add Book section visible
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('add-book');
+        });
+        
+        // Add Book Form Submission
+        document.getElementById('add-book-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const sNo = parseInt(document.getElementById('book-sno').value);
+            const bookName = document.getElementById('book-name').value;
+            const authorName = document.getElementById('author-name').value;
+            const bookQty = parseInt(document.getElementById('book-qty').value);
+            
+            // Check if book with same serial number already exists
+            const existingBook = books.find(book => book.sNo === sNo);
+            if (existingBook) {
+                showMessage('add-book-message', 'Oops! A book with this number already exists.', 'error');
+                return;
+            }
+            
+            // Check if book with same name already exists
+            const existingBookName = books.find(book => 
+                book.bookName.toLowerCase() === bookName.toLowerCase());
+            if (existingBookName) {
+                showMessage('add-book-message', 'We already have a book with this name!', 'error');
+                return;
+            }
+            
+            // Add the new book
+            const newBook = {
+                sNo: sNo,
+                bookName: bookName,
+                authorName: authorName,
+                bookQty: bookQty,
+                bookQtyCopy: bookQty
+            };
+            
+            books.push(newBook);
+            saveBooksToStorage();
+            
+            showMessage('add-book-message', 'Yay! New book added to our library!', 'success');
+            document.getElementById('add-book-form').reset();
+        });
+        
+        // Upgrade Book Quantity Form Submission
+        document.getElementById('upgrade-book-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const sNo = parseInt(document.getElementById('upgrade-sno').value);
+            const addQty = parseInt(document.getElementById('add-qty').value);
+            
+            const bookIndex = books.findIndex(book => book.sNo === sNo);
+            
+            if (bookIndex === -1) {
+                showMessage('upgrade-book-message', "Hmm, we can't find a book with this number.", 'error');
+                return;
+            }
+            
+            books[bookIndex].bookQty += addQty;
+            books[bookIndex].bookQtyCopy += addQty;
+            saveBooksToStorage();
+            
+            showMessage('upgrade-book-message', 
+                `Great! We now have ${books[bookIndex].bookQty} copies of this book!`, 'success');
+            document.getElementById('upgrade-book-form').reset();
+        });
+        
+        // Search by Serial Number
+        function searchBySerial() {
+            const sNo = prompt("Enter Book Number:");
+            if (!sNo) return;
+            
+            const book = books.find(b => b.sNo === parseInt(sNo));
+            
+            let resultsHTML = '';
+            if (book) {
+                resultsHTML = `
+                    <div class="message success">We found your book!</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book No</th>
+                                <th>Name</th>
+                                <th>Author</th>
+                                <th>Available</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${book.sNo}</td>
+                                <td>${book.bookName}</td>
+                                <td>${book.authorName}</td>
+                                <td>${book.bookQtyCopy}</td>
+                                <td>${book.bookQty}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+            } else {
+                resultsHTML = `<div class="message error">Sorry, we couldn't find book number ${sNo}.</div>`;
+            }
+            
+            document.getElementById('search-results').innerHTML = resultsHTML;
+        }
+        
+        // Search by Author Name
+        function searchByAuthor() {
+            const authorName = prompt("Enter Author Name:");
+            if (!authorName) return;
+            
+            const authorBooks = books.filter(book => 
+                book.authorName.toLowerCase().includes(authorName.toLowerCase()));
+            
+            let resultsHTML = '';
+            if (authorBooks.length > 0) {
+                resultsHTML = `
+                    <div class="message success">We found ${authorBooks.length} books by ${authorName}!</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book No</th>
+                                <th>Name</th>
+                                <th>Author</th>
+                                <th>Available</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${authorBooks.map(book => `
+                                <tr>
+                                    <td>${book.sNo}</td>
+                                    <td>${book.bookName}</td>
+                                    <td>${book.authorName}</td>
+                                    <td>${book.bookQtyCopy}</td>
+                                    <td>${book.bookQty}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } else {
+                resultsHTML = `<div class="message error">Sorry, we couldn't find any books by ${authorName}.</div>`;
+            }
+            
+            document.getElementById('search-results').innerHTML = resultsHTML;
+        }
+        
+        // Display all books in a table
+        function displayBooksTable() {
+            let tableHTML = '';
+            
+            if (books.length === 0) {
+                tableHTML = '<div class="message warning">Our library is empty. Let\'s add some books!</div>';
+            } else {
+                tableHTML = `
+                    <div class="message success">We have ${books.length} amazing books in our library!</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book No</th>
+                                <th>Name</th>
+                                <th>Author</th>
+                                <th>Available</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${books.map(book => `
+                                <tr>
+                                    <td>${book.sNo}</td>
+                                    <td>${book.bookName}</td>
+                                    <td>${book.authorName}</td>
+                                    <td>${book.bookQtyCopy}</td>
+                                    <td>${book.bookQty}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('books-table-container').innerHTML = tableHTML;
+        }
+        
+        // Register Student Form Submission
+        document.getElementById('register-student-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentName = document.getElementById('student-name').value;
+            const regNum = document.getElementById('reg-number').value;
+            
+            // Check if student with same registration number already exists
+            const existingStudent = students.find(student => 
+                student.regNum.toLowerCase() === regNum.toLowerCase());
+            
+            if (existingStudent) {
+                showMessage('register-student-message', 
+                    `Someone already has library card number ${regNum}.`, 'error');
+                return;
+            }
+            
+            // Add the new student
+            const newStudent = {
+                studentName: studentName,
+                regNum: regNum,
+                borrowedBooks: [],
+                booksCount: 0
+            };
+            
+            students.push(newStudent);
+            saveStudentsToStorage();
+            
+            showMessage('register-student-message', `Welcome to our library, ${studentName}!`, 'success');
+            document.getElementById('register-student-form').reset();
+        });
+        
+        // Display all students in a table
+        function displayStudentsTable() {
+            let tableHTML = '';
+            
+            if (students.length === 0) {
+                tableHTML = '<div class="message warning">No one has joined our library yet. Be the first!</div>';
+            } else {
+                tableHTML = `
+                    <div class="message success">We have ${students.length} friends in our library!</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Library Card</th>
+                                <th>Books Borrowed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${students.map(student => `
+                                <tr>
+                                    <td>${student.studentName}</td>
+                                    <td>${student.regNum}</td>
+                                    <td>${student.booksCount}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('students-table-container').innerHTML = tableHTML;
+        }
+        
+        // Check Out Book Form Submission
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const regNum = document.getElementById('student-reg-checkout').value;
+            const sNo = parseInt(document.getElementById('book-sno-checkout').value);
+            
+            // Find student
+            const studentIndex = students.findIndex(student => 
+                student.regNum.toLowerCase() === regNum.toLowerCase());
+            
+            if (studentIndex === -1) {
+                showMessage('checkout-message', "We can't find your library card. Please join our library first!", 'error');
+                return;
+            }
+            
+            // Find book
+            const bookIndex = books.findIndex(book => book.sNo === sNo);
+            
+            if (bookIndex === -1) {
+                showMessage('checkout-message', "We don't have a book with this number.", 'error');
+                return;
+            }
+            
+            // Check if book is available
+            if (books[bookIndex].bookQtyCopy <= 0) {
+                showMessage('checkout-message', 'Sorry, this book is not available right now.', 'error');
+                return;
+            }
+            
+            // Check if student can borrow more books
+            if (students[studentIndex].booksCount >= 3) {
+                showMessage('checkout-message', 
+                    'You already have 3 books. Please return one before borrowing another.', 'error');
+                return;
+            }
+            
+            // Check out the book
+            books[bookIndex].bookQtyCopy--;
+            students[studentIndex].borrowedBooks.push(books[bookIndex]);
+            students[studentIndex].booksCount++;
+            
+            saveBooksToStorage();
+            saveStudentsToStorage();
+            
+            showMessage('checkout-message', 
+                `Yay! You borrowed "${books[bookIndex].bookName}"! Enjoy reading!`, 'success');
+            document.getElementById('checkout-form').reset();
+        });
+        
+        // Check In Book Form Submission
+        document.getElementById('checkin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const regNum = document.getElementById('student-reg-checkin').value;
+            const sNo = parseInt(document.getElementById('book-sno-checkin').value);
+            
+            // Find student
+            const studentIndex = students.findIndex(student => 
+                student.regNum.toLowerCase() === regNum.toLowerCase());
+            
+            if (studentIndex === -1) {
+                showMessage('checkin-message', "We can't find your library card.", 'error');
+                return;
+            }
+            
+            // Find if student has borrowed the book
+            const borrowedBookIndex = students[studentIndex].borrowedBooks.findIndex(
+                book => book.sNo === sNo);
+            
+            if (borrowedBookIndex === -1) {
+                showMessage('checkin-message', 
+                    "You haven't borrowed this book.", 'error');
+                return;
+            }
+            
+            // Find book in library
+            const bookIndex = books.findIndex(book => book.sNo === sNo);
+            
+            if (bookIndex === -1) {
+                showMessage('checkin-message', "We can't find this book in our library.", 'error');
+                return;
+            }
+            
+            // Check in the book
+            books[bookIndex].bookQtyCopy++;
+            students[studentIndex].borrowedBooks.splice(borrowedBookIndex, 1);
+            students[studentIndex].booksCount--;
+            
+            saveBooksToStorage();
+            saveStudentsToStorage();
+            
+            showMessage('checkin-message', 
+                `Thank you for returning "${books[bookIndex].bookName}"!`, 'success');
+            document.getElementById('checkin-form').reset();
+        });
+        
+        // Helper function to show messages
+        function showMessage(elementId, message, type) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.innerHTML = `<div class="message ${type}">${message}</div>`;
+            
+            // Clear message after 5 seconds
+            setTimeout(() => {
+                messageElement.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Save books to localStorage
+        function saveBooksToStorage() {
+            localStorage.setItem('kidsLibraryBooks', JSON.stringify(books));
+        }
+        
+        // Save students to localStorage
+        function saveStudentsToStorage() {
+            localStorage.setItem('kidsLibraryStudents', JSON.stringify(students));
+        }
+    </script>
+</body>
+</html>
